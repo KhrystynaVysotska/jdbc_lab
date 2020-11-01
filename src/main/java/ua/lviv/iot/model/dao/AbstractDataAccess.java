@@ -1,7 +1,6 @@
 package ua.lviv.iot.model.dao;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,9 +19,9 @@ import ua.lviv.iot.transformer.Transformer;
 public abstract class AbstractDataAccess<T, ID> implements DataAccess<T, ID> {
 	private Class<T> clazz;
 	private String tableName;
-	private static final String FIND_ALL = "SELECT * FROM ?";
-	private static final String FIND_BY_ID = "SELECT * FROM ? WHERE id = ?";
-	private static final String DELETE = "DELETE FROM ? WHERE id = ?";
+	private static final String FIND_ALL = "SELECT * FROM %s;";
+	private static final String FIND_BY_ID = "SELECT * FROM %s WHERE id = ?;";
+	private static final String DELETE = "DELETE FROM %s WHERE id = ?;";
 
 	public AbstractDataAccess(Class<T> clazz) {
 		this.clazz = clazz;
@@ -33,8 +32,8 @@ public abstract class AbstractDataAccess<T, ID> implements DataAccess<T, ID> {
 	public List<T> findAll() throws SQLException {
 		List<T> entities = new LinkedList<>();
 		try (Connection connection = ConnectionManager.getConnection()) {
-			try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL)) {
-				preparedStatement.setString(1, tableName);
+			try (PreparedStatement preparedStatement = connection
+					.prepareStatement(String.format(FIND_ALL, tableName))) {
 				try (ResultSet resultSet = preparedStatement.executeQuery()) {
 					while (resultSet.next()) {
 						entities.add((T) new Transformer<T>(clazz).convertResultSetToEntity(resultSet));
@@ -49,9 +48,9 @@ public abstract class AbstractDataAccess<T, ID> implements DataAccess<T, ID> {
 	public T findById(ID id) throws SQLException {
 		T entity = null;
 		try (Connection connection = ConnectionManager.getConnection()) {
-			try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID)) {
-				preparedStatement.setString(1, tableName);
-				preparedStatement.setString(2, id.toString());
+			try (PreparedStatement preparedStatement = connection
+					.prepareStatement(String.format(FIND_BY_ID, tableName))) {
+				preparedStatement.setObject(1, id);
 				try (ResultSet resultSet = preparedStatement.executeQuery()) {
 					while (resultSet.next()) {
 						entity = (T) new Transformer<T>(clazz).convertResultSetToEntity(resultSet);
@@ -128,9 +127,8 @@ public abstract class AbstractDataAccess<T, ID> implements DataAccess<T, ID> {
 	@Override
 	public int delete(ID id) throws SQLException {
 		try (Connection connection = ConnectionManager.getConnection()) {
-			try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE)) {
-				preparedStatement.setString(1, tableName);
-				preparedStatement.setString(2, id.toString());
+			try (PreparedStatement preparedStatement = connection.prepareStatement(String.format(DELETE, tableName))) {
+				preparedStatement.setObject(1, id);
 				return preparedStatement.executeUpdate();
 			}
 		}

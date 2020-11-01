@@ -24,6 +24,7 @@ public class Transformer<T> {
 			if (clazz.isAnnotationPresent(Table.class)) {
 				Field[] fields = clazz.getDeclaredFields();
 				for (Field field : fields) {
+					field.setAccessible(true);
 					if (field.isAnnotationPresent(Column.class)) {
 						Column column = field.getAnnotation(Column.class);
 						String columnName = column.name();
@@ -35,6 +36,8 @@ public class Transformer<T> {
 							field.set(entity, resultSet.getInt(columnName));
 						} else if (fieldDataType == Date.class) {
 							field.set(entity, resultSet.getDate(columnName));
+						} else if (fieldDataType == Long.class) {
+							field.set(entity, resultSet.getLong(columnName));
 						}
 					}
 					if (field.isAnnotationPresent(PrimaryKeyComposite.class)) {
@@ -42,11 +45,11 @@ public class Transformer<T> {
 						Object compositePrimaryKey = fieldDataType.getConstructor().newInstance();
 						Field[] fieldsOfCompositePrimaryKey = fieldDataType.getDeclaredFields();
 						for (Field fieldOfCompositePrimaryKey : fieldsOfCompositePrimaryKey) {
+							fieldOfCompositePrimaryKey.setAccessible(true);
 							if (fieldOfCompositePrimaryKey.isAnnotationPresent(Column.class)) {
 								Column column = fieldOfCompositePrimaryKey.getAnnotation(Column.class);
 								String columnName = column.name();
-								fieldOfCompositePrimaryKey.setAccessible(true);
-								Class<?> fieldOfCompositePrimaryKeyDataType = field.getType();
+								Class<?> fieldOfCompositePrimaryKeyDataType = fieldOfCompositePrimaryKey.getType();
 								if (fieldOfCompositePrimaryKeyDataType == Integer.class) {
 									fieldOfCompositePrimaryKey.set(compositePrimaryKey, resultSet.getInt(columnName));
 								} else if (fieldOfCompositePrimaryKeyDataType == String.class) {
