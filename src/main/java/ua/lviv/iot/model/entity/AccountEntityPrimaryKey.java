@@ -10,6 +10,10 @@ public class AccountEntityPrimaryKey {
 	@Column(name = "pin_code_id")
 	private Integer pinCodeId;
 
+	public AccountEntityPrimaryKey() {
+		
+	}
+
 	public AccountEntityPrimaryKey(Integer id, Integer pinCodeId) {
 		this.id = id;
 		this.pinCodeId = pinCodeId;
