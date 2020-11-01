@@ -19,18 +19,19 @@ import ua.lviv.iot.transformer.Transformer;
 
 public abstract class AbstractDataAccess<T, ID> implements DataAccess<T, ID> {
 	private Class<T> clazz;
+	private String tableName;
 	private static final String FIND_ALL = "SELECT * FROM ?";
 	private static final String FIND_BY_ID = "SELECT * FROM ? WHERE id = ?";
 	private static final String DELETE = "DELETE FROM ? WHERE id = ?";
 
 	public AbstractDataAccess(Class<T> clazz) {
 		this.clazz = clazz;
+		this.tableName = clazz.getAnnotation(Table.class).name();
 	}
 
 	@Override
 	public List<T> findAll() throws SQLException {
 		List<T> entities = new LinkedList<>();
-		String tableName = clazz.getAnnotation(Table.class).name();
 		try (Connection connection = ConnectionManager.getConnection()) {
 			try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL)) {
 				preparedStatement.setString(1, tableName);
@@ -47,7 +48,6 @@ public abstract class AbstractDataAccess<T, ID> implements DataAccess<T, ID> {
 	@Override
 	public T findById(ID id) throws SQLException {
 		T entity = null;
-		String tableName = clazz.getAnnotation(Table.class).name();
 		try (Connection connection = ConnectionManager.getConnection()) {
 			try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID)) {
 				preparedStatement.setString(1, tableName);
@@ -70,26 +70,19 @@ public abstract class AbstractDataAccess<T, ID> implements DataAccess<T, ID> {
 			try {
 				if (!field.isAnnotationPresent(PrimaryKey.class)) {
 					if (field.isAnnotationPresent(PrimaryKeyComposite.class)) {
-						Class<?> fieldDataType = field.getType();
-						Object compositePrimaryKey = fieldDataType.getConstructor().newInstance();
+						Object compositePrimaryKey = field.get(entity);
 						Field[] innerFields = compositePrimaryKey.getClass().getDeclaredFields();
-						for (Field innerField : innerFields) {
-							if (!innerField.isAnnotationPresent(PrimaryKey.class)) {
-								columnNames += innerField.getAnnotation(Column.class).name() + ", ";
-							}
-						}
-
+						columnNames += getColumnNames(innerFields, (T) compositePrimaryKey) + ", ";
 					} else {
 						columnNames += field.getAnnotation(Column.class).name() + ", ";
 					}
 				}
 
-			} catch (InstantiationException | InvocationTargetException | NoSuchMethodException | SecurityException
-					| IllegalAccessException | IllegalArgumentException e) {
+			} catch (SecurityException | IllegalAccessException | IllegalArgumentException e) {
 				e.printStackTrace();
 			}
 		}
-		return columnNames.substring(0, columnNames.length() - 1);
+		return columnNames.substring(0, columnNames.length() - 2);
 	}
 
 	private String getValuesToInsert(Field[] fields, T entity) {
@@ -99,50 +92,41 @@ public abstract class AbstractDataAccess<T, ID> implements DataAccess<T, ID> {
 			try {
 				if (!field.isAnnotationPresent(PrimaryKey.class)) {
 					if (field.isAnnotationPresent(PrimaryKeyComposite.class)) {
-						Class<?> fieldDataType = field.getType();
-						Object compositePrimaryKey = fieldDataType.getConstructor().newInstance();
+						Object compositePrimaryKey = field.get(entity);
 						Field[] innerFields = compositePrimaryKey.getClass().getDeclaredFields();
-						for (Field innerField : innerFields) {
-							if (!innerField.isAnnotationPresent(PrimaryKey.class)) {
-								valuesToInsert += innerField.get(entity).toString() + ", ";
-							}
-						}
-
+						valuesToInsert += getValuesToInsert(innerFields, (T) compositePrimaryKey) + ", ";
 					} else {
 						valuesToInsert += field.get(entity).toString() + ", ";
 					}
 				}
 
-			} catch (InstantiationException | InvocationTargetException | NoSuchMethodException | SecurityException
-					| IllegalAccessException | IllegalArgumentException e) {
+			} catch (SecurityException | IllegalAccessException | IllegalArgumentException e) {
 				e.printStackTrace();
 			}
 		}
-		return valuesToInsert.substring(0, valuesToInsert.length()-1);
+		return valuesToInsert.substring(0, valuesToInsert.length() - 2);
 	}
 
 	@Override
-	public void create(T entity) throws SQLException {
-		String tableName = clazz.getAnnotation(Table.class).name();
+	public int create(T entity) throws SQLException {
 		Field[] fields = entity.getClass().getDeclaredFields();
 		String columnNames = getColumnNames(fields, entity);
 		String valuesToInsert = getValuesToInsert(fields, entity);
 		String insert = "INSERT INTO " + tableName + " (" + columnNames + ") VALUES (" + valuesToInsert + ");";
 		try (Connection connection = ConnectionManager.getConnection()) {
 			try (Statement statement = connection.createStatement()) {
-				statement.executeQuery(insert);
+				return statement.executeUpdate(insert);
 			}
 		}
 	}
 
 	@Override
 	public void update(T entity) throws SQLException {
-	
+
 	}
 
 	@Override
 	public int delete(ID id) throws SQLException {
-		String tableName = clazz.getAnnotation(Table.class).name();
 		try (Connection connection = ConnectionManager.getConnection()) {
 			try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE)) {
 				preparedStatement.setString(1, tableName);

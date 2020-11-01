@@ -8,7 +8,7 @@ public interface DataAccess<T, ID> {
 
 	T findById(ID id) throws SQLException;
 
-	void create(T entity) throws SQLException;
+	int create(T entity) throws SQLException;
 
 	void update(T entity) throws SQLException;
 
