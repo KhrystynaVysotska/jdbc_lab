@@ -21,6 +21,18 @@ public class AccountEntity {
 	@Column(name = "account_type_id")
 	private Integer accountTypeId;
 
+	public AccountEntity(AccountEntityPrimaryKey accountEntityPrimaryKey, Long currentAccountNumber, Integer amount,
+			Integer accountOwnerId, Integer bankIdentificationCode, Integer currencyId, Integer accountTypeId) {
+		super();
+		this.accountEntityPrimaryKey = accountEntityPrimaryKey;
+		this.currentAccountNumber = currentAccountNumber;
+		this.amount = amount;
+		this.accountOwnerId = accountOwnerId;
+		this.bankIdentificationCode = bankIdentificationCode;
+		this.currencyId = currencyId;
+		this.accountTypeId = accountTypeId;
+	}
+	
 	public AccountEntityPrimaryKey getAccountPrimaryKey() {
 		return accountEntityPrimaryKey;
 	}
