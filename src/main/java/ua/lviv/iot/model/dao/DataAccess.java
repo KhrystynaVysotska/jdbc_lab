@@ -10,7 +10,7 @@ public interface DataAccess<T, ID> {
 
 	int create(T entity) throws SQLException;
 
-	void update(T entity) throws SQLException;
+	int update(T entity) throws SQLException;
 
 	int delete(ID id) throws SQLException;
 }

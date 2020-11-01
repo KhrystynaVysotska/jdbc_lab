@@ -119,9 +119,51 @@ public abstract class AbstractDataAccess<T, ID> implements DataAccess<T, ID> {
 		}
 	}
 
-	@Override
-	public void update(T entity) throws SQLException {
+	private String getCondition(Field[] fields, T entity) {
+		String condition = "";
+		for (Field field : fields) {
+			field.setAccessible(true);
+			try {
+				if (field.isAnnotationPresent(PrimaryKey.class) && field.isAnnotationPresent(Column.class)) {
+					String fieldName = field.getAnnotation(Column.class).name();
+					condition += fieldName + "=";
 
+					String fieldValue = field.get(entity).toString();
+					condition += fieldValue;
+				} else if (field.isAnnotationPresent(PrimaryKeyComposite.class)) {
+					Object compositePrimaryKey;
+					compositePrimaryKey = field.get(entity);
+					Field[] innerFields = compositePrimaryKey.getClass().getDeclaredFields();
+					condition += getCondition(innerFields, (T) compositePrimaryKey);
+				}
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+		return condition;
+	}
+
+	private String getValuesToUpdate(Field[] fields, T entity) {
+		String[] columnNames = getColumnNames(fields, entity).split(",");
+		String[] values = getValuesToInsert(fields, entity).split(",");
+		String valuesToUpdate = "";
+		for (int i = 0; i < columnNames.length; i++) {
+			valuesToUpdate += columnNames[i].trim() + "=" + values[i].trim() + ", ";
+		}
+		return valuesToUpdate.substring(0, valuesToUpdate.length() - 2);
+	}
+
+	@Override
+	public int update(T entity) throws SQLException {
+		Field[] fields = entity.getClass().getDeclaredFields();
+		String valuesToUpdate = getValuesToUpdate(fields, entity);
+		String condition = getCondition(fields, entity);
+		String update = "UPDATE " + tableName + " SET " + valuesToUpdate + " WHERE " + condition + ";";
+		try (Connection connection = ConnectionManager.getConnection()) {
+			try (Statement statement = connection.createStatement()) {
+				return statement.executeUpdate(update);
+			}
+		}
 	}
 
 	@Override
