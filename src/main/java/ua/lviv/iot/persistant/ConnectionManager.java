@@ -16,14 +16,12 @@ public class ConnectionManager {
 	}
 
 	public static Connection getConnection() {
-		if (connection == null) {
-			try {
-				connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-			} catch (SQLException e) {
-				System.out.println("SQLException: " + e.getMessage());
-				System.out.println("SQLState: " + e.getSQLState());
-				System.out.println("VendorError: " + e.getErrorCode());
-			}
+		try {
+			connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+		} catch (SQLException e) {
+			System.out.println("SQLException: " + e.getMessage());
+			System.out.println("SQLState: " + e.getSQLState());
+			System.out.println("VendorError: " + e.getErrorCode());
 		}
 		return connection;
 	}
