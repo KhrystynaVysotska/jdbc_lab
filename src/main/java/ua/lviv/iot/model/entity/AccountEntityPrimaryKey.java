@@ -1,10 +1,12 @@
 package ua.lviv.iot.model.entity;
 
+import ua.lviv.iot.annotation.Autoincremented;
 import ua.lviv.iot.annotation.Column;
 import ua.lviv.iot.annotation.PrimaryKey;
 
 public class AccountEntityPrimaryKey {
 	@PrimaryKey
+	@Autoincremented
 	@Column(name = "id")
 	private Integer id;
 	@Column(name = "pin_code_id")
