@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
+import ua.lviv.iot.annotation.Autoincremented;
 import ua.lviv.iot.annotation.Column;
 import ua.lviv.iot.annotation.PrimaryKey;
 import ua.lviv.iot.annotation.PrimaryKeyComposite;
@@ -67,7 +68,7 @@ public abstract class AbstractDataAccess<T, ID> implements DataAccess<T, ID> {
 		for (Field field : fields) {
 			field.setAccessible(true);
 			try {
-				if (!field.isAnnotationPresent(PrimaryKey.class)) {
+				if (!field.isAnnotationPresent(Autoincremented.class)) {
 					if (field.isAnnotationPresent(PrimaryKeyComposite.class)) {
 						Object compositePrimaryKey = field.get(entity);
 						Field[] innerFields = compositePrimaryKey.getClass().getDeclaredFields();
@@ -89,7 +90,7 @@ public abstract class AbstractDataAccess<T, ID> implements DataAccess<T, ID> {
 		for (Field field : fields) {
 			field.setAccessible(true);
 			try {
-				if (!field.isAnnotationPresent(PrimaryKey.class)) {
+				if (!field.isAnnotationPresent(Autoincremented.class)) {
 					if (field.isAnnotationPresent(PrimaryKeyComposite.class)) {
 						Object compositePrimaryKey = field.get(entity);
 						Field[] innerFields = compositePrimaryKey.getClass().getDeclaredFields();
