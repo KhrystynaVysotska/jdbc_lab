@@ -1,7 +1,5 @@
 package ua.lviv.iot.controller.implementation;
 
-import java.lang.reflect.Field;
-import java.sql.SQLException;
 import java.util.Scanner;
 
 import ua.lviv.iot.controller.AbstractController;
@@ -11,7 +9,6 @@ import ua.lviv.iot.model.service.Service;
 import ua.lviv.iot.model.service.implementation.AccountService;
 
 public class AccountController extends AbstractController<AccountEntity, Integer> {
-	private static final String ERROR_MESSAGE = "Oops...something went wrong";
 	private static Scanner input = new Scanner(System.in);
 
 	private AccountService accountService = new AccountService();
@@ -19,41 +16,6 @@ public class AccountController extends AbstractController<AccountEntity, Integer
 	@Override
 	protected Service<AccountEntity, Integer> getService() {
 		return accountService;
-	}
-
-	public void update() {
-		System.out.println("Enter id of account you want to update: ");
-		int id = Integer.parseInt(input.nextLine());
-		try {
-			AccountEntity account = accountService.findById(id);
-			if (account != null) {
-				System.out.println("\nChoose and enter the name of field you want to update: \n");
-				Field[] fieldNames = account.getClass().getDeclaredFields();
-				for (Field field : fieldNames) {
-					System.out.println(field.getName() + "\n");
-				}
-				String fieldToUpdate = input.nextLine();
-				for (Field field : fieldNames) {
-					field.setAccessible(true);
-					if (field.getName().equals(fieldToUpdate)) {
-						System.out.println("Enter new value for " + fieldToUpdate + ": ");
-						String value = input.nextLine();
-						try {
-							field.set(account, Integer.parseInt(value));
-							super.update(id, account);
-						} catch (IllegalArgumentException | IllegalAccessException e) {
-							System.out.println("Something went wrong....please, check your inputs and try again");
-						}
-						break;
-					}
-				}
-			} else {
-				System.out.println("Oops...such object does not exist!");
-			}
-		} catch (SQLException e1) {
-			System.out.println(ERROR_MESSAGE);
-		}
-
 	}
 
 	public void create() {

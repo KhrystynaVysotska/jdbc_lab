@@ -3,6 +3,7 @@ package ua.lviv.iot.model.entity;
 import ua.lviv.iot.annotation.Column;
 import ua.lviv.iot.annotation.PrimaryKeyComposite;
 import ua.lviv.iot.annotation.Table;
+import ua.lviv.iot.model.entity.formatter.Formatter;
 
 @Table(name = "account")
 public class AccountEntity {
@@ -95,10 +96,13 @@ public class AccountEntity {
 
 	@Override
 	public String toString() {
-		return "AccountEntity [accountEntityPrimaryKey=" + accountEntityPrimaryKey + ", currentAccountNumber="
-				+ currentAccountNumber + ", amount=" + amount + ", accountOwnerId=" + accountOwnerId
-				+ ", bankIdentificationCode=" + bankIdentificationCode + ", currencyId=" + currencyId
-				+ ", accountTypeId=" + accountTypeId + "]";
+		String[] columnsNames = { "account_id", "pin_code_id", "current_account_number", "amount", "account_owner_id",
+				"bank_identification_code", "currency_id", "account_type_id" };
+		String[] columnValues = { accountEntityPrimaryKey.getId().toString(),
+				accountEntityPrimaryKey.getPinCodeId().toString(), currentAccountNumber.toString(), amount.toString(),
+				accountOwnerId.toString(), bankIdentificationCode.toString(), currencyId.toString(),
+				accountTypeId.toString() };
+		return Formatter.formatRow(columnsNames, columnValues);
 	}
 
 	@Override

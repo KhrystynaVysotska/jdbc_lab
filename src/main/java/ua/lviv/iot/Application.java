@@ -10,7 +10,7 @@ import ua.lviv.iot.persistant.ConnectionManager;
 import ua.lviv.iot.view.ConsoleMenu;
 
 public class Application {
-	
+
 	public static void main(String[] args) throws SQLException {
 		new ConsoleMenu().showMenu();
 		ConnectionManager.closeConnection();

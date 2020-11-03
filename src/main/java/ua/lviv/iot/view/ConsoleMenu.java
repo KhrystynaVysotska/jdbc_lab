@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 import ua.lviv.iot.controller.implementation.AccountController;
+import ua.lviv.iot.controller.implementation.BankController;
 
 public class ConsoleMenu {
 	private static final String EXIT = "Q";
@@ -33,7 +34,10 @@ public class ConsoleMenu {
 				openSubMenu(choice.trim().toUpperCase());
 				choice = input.nextLine().trim().toUpperCase();
 				if (!choice.equals(EXIT)) {
-					methodsMenu.get(choice).print();
+					if (choice.length() == 2)
+						methodsMenu.get(choice).print();
+					else
+						System.out.println("Incorrect option! Try again\n");
 				}
 			}
 		} while (!choice.equals(EXIT));
@@ -80,6 +84,11 @@ public class ConsoleMenu {
 	}
 
 	private void generateMenuMethods() {
+		methodsMenu.put("11", () -> new BankController().create());
+		methodsMenu.put("12", () -> new BankController().getById());
+		methodsMenu.put("13", () -> new BankController().deleteById());
+		methodsMenu.put("14", () -> new BankController().update());
+		methodsMenu.put("15", () -> new BankController().getAll());
 		methodsMenu.put("21", () -> new AccountController().create());
 		methodsMenu.put("22", () -> new AccountController().getById());
 		methodsMenu.put("23", () -> new AccountController().deleteById());
@@ -104,11 +113,11 @@ public class ConsoleMenu {
 	}
 
 	private void generateBankTableSubMenu() {
-		menu.put("11", "11 - CREATE NEW BANK");
-		menu.put("12", "12 - GET DATA ABOUT BANK");
-		menu.put("13", "13 - DELETE BANK");
-		menu.put("14", "14 - UPDATE BANK DATA");
-		menu.put("15", "15 - SEE ALL BANKS");
+		menu.put("11", "  11 - CREATE NEW BANK");
+		menu.put("12", "  12 - GET DATA ABOUT BANK");
+		menu.put("13", "  13 - DELETE BANK");
+		menu.put("14", "  14 - UPDATE BANK DATA");
+		menu.put("15", "  15 - SEE ALL BANKS");
 	}
 
 	private void generateAccountTableSubMenu() {
@@ -120,90 +129,90 @@ public class ConsoleMenu {
 	}
 
 	private void generateAccountOwnerTableSubMenu() {
-		menu.put("31", "31 - CREATE NEW OWNER");
-		menu.put("32", "32 - GET DATA ABOUT OWNER");
-		menu.put("33", "33 - DELETE OWNER");
-		menu.put("34", "34 - UPDATE OWNER DATA");
-		menu.put("35", "35 - SEE ALL OWNERS");
+		menu.put("31", "  31 - CREATE NEW OWNER");
+		menu.put("32", "  32 - GET DATA ABOUT OWNER");
+		menu.put("33", "  33 - DELETE OWNER");
+		menu.put("34", "  34 - UPDATE OWNER DATA");
+		menu.put("35", "  35 - SEE ALL OWNERS");
 	}
 
 	private void generateBankCardTableSubMenu() {
-		menu.put("41", "41 - CREATE NEW BANK CARD");
-		menu.put("42", "42 - GET DATA ABOUT BANK CARD");
-		menu.put("43", "43 - DELETE BANK CARD");
-		menu.put("44", "44 - UPDATE BANK CARD DATA");
-		menu.put("45", "45 - SEE ALL BANK CARDS");
+		menu.put("41", "  41 - CREATE NEW BANK CARD");
+		menu.put("42", "  42 - GET DATA ABOUT BANK CARD");
+		menu.put("43", "  43 - DELETE BANK CARD");
+		menu.put("44", "  44 - UPDATE BANK CARD DATA");
+		menu.put("45", "  45 - SEE ALL BANK CARDS");
 	}
 
 	private void generateMoneyTransferTableSubMenu() {
-		menu.put("51", "51 - MAKE NEW TRANSFER");
-		menu.put("52", "52 - GET DATA ABOUT TRANSFER");
-		menu.put("53", "53 - DELETE TRANSFER FROM DATABASE");
-		menu.put("54", "54 - UPDATE TRANSFER DATA");
-		menu.put("55", "55 - SEE TRANSFERS HISTORY");
+		menu.put("51", "  51 - MAKE NEW TRANSFER");
+		menu.put("52", "  52 - GET DATA ABOUT TRANSFER");
+		menu.put("53", "  53 - DELETE TRANSFER FROM DATABASE");
+		menu.put("54", "  54 - UPDATE TRANSFER DATA");
+		menu.put("55", "  55 - SEE TRANSFERS HISTORY");
 	}
 
 	private void generateAccountTypeTableSubMenu() {
-		menu.put("61", "61 - CREATE NEW ACCOUNT TYPE");
-		menu.put("62", "62 - FIND ACCOUNT TYPE");
-		menu.put("63", "63 - DELETE ACCOUNT TYPE");
-		menu.put("64", "64 - UPDATE ACCOUNT TYPE");
-		menu.put("65", "65 - SEE ALL ACCOUNT TYPES");
+		menu.put("61", "  61 - CREATE NEW ACCOUNT TYPE");
+		menu.put("62", "  62 - FIND ACCOUNT TYPE");
+		menu.put("63", "  63 - DELETE ACCOUNT TYPE");
+		menu.put("64", "  64 - UPDATE ACCOUNT TYPE");
+		menu.put("65", "  65 - SEE ALL ACCOUNT TYPES");
 	}
 
 	private void generateCardTypeTableSubMenu() {
-		menu.put("71", "71 - CREATE NEW CARD TYPE");
-		menu.put("72", "72 - FIND CARD TYPE");
-		menu.put("73", "73 - DELETE CARD TYPE");
-		menu.put("74", "74 - UPDATE CARD TYPE");
-		menu.put("75", "75 - SEE ALL CARD TYPES");
+		menu.put("71", "  71 - CREATE NEW CARD TYPE");
+		menu.put("72", "  72 - FIND CARD TYPE");
+		menu.put("73", "  73 - DELETE CARD TYPE");
+		menu.put("74", "  74 - UPDATE CARD TYPE");
+		menu.put("75", "  75 - SEE ALL CARD TYPES");
 	}
 
 	private void generateAdressTableSubMenu() {
-		menu.put("81", "81 - ADD NEW ADRESS");
-		menu.put("82", "82 - FIND ADRESS");
-		menu.put("83", "83 - DELETE ADRESS");
-		menu.put("84", "84 - UPDATE ADRESS");
-		menu.put("85", "85 - SEE ALL ADRESSES");
+		menu.put("81", "  81 - ADD NEW ADRESS");
+		menu.put("82", "  82 - FIND ADRESS");
+		menu.put("83", "  83 - DELETE ADRESS");
+		menu.put("84", "  84 - UPDATE ADRESS");
+		menu.put("85", "  85 - SEE ALL ADRESSES");
 	}
 
 	private void generateCityTableSubMenu() {
-		menu.put("91", "91 - ADD NEW CITY");
-		menu.put("92", "92 - FIND CITY");
-		menu.put("93", "93 - DELETE CITY");
-		menu.put("94", "94 - UPDATE CITY");
-		menu.put("95", "95 - SEE ALL CITIES");
+		menu.put("91", "  91 - ADD NEW CITY");
+		menu.put("92", "  92 - FIND CITY");
+		menu.put("93", "  93 - DELETE CITY");
+		menu.put("94", "  94 - UPDATE CITY");
+		menu.put("95", "  95 - SEE ALL CITIES");
 	}
 
 	private void generateStreetTableSubMenu() {
-		menu.put("A1", "A1 - ADD NEW STREET");
-		menu.put("A2", "A2 - FIND STREET");
-		menu.put("A3", "A3 - DELETE STREET");
-		menu.put("A4", "A4 - UPDATE STREET");
-		menu.put("A5", "A5 - SEE ALL STREETS");
+		menu.put("A1", "  A1 - ADD NEW STREET");
+		menu.put("A2", "  A2 - FIND STREET");
+		menu.put("A3", "  A3 - DELETE STREET");
+		menu.put("A4", "  A4 - UPDATE STREET");
+		menu.put("A5", "  A5 - SEE ALL STREETS");
 	}
 
 	private void generateBuildingTableSubMenu() {
-		menu.put("B1", "B1 - ADD NEW BUILDING");
-		menu.put("B2", "B2 - FIND BUILDING");
-		menu.put("B3", "B3 - DELETE BUILDING");
-		menu.put("B4", "B4 - UPDATE BUILDING");
-		menu.put("B5", "B5 - SEE ALL BUILDINGS");
+		menu.put("B1", "  B1 - ADD NEW BUILDING");
+		menu.put("B2", "  B2 - FIND BUILDING");
+		menu.put("B3", "  B3 - DELETE BUILDING");
+		menu.put("B4", "  B4 - UPDATE BUILDING");
+		menu.put("B5", "  B5 - SEE ALL BUILDINGS");
 	}
 
 	private void generateCurrencyTableSubMenu() {
-		menu.put("C1", "C1 - ADD NEW CURRENCY");
-		menu.put("C2", "C2 - FIND CURRENCY");
-		menu.put("C3", "C3 - DELETE CURRENCY");
-		menu.put("C4", "C4 - UPDATE CURRENCY");
-		menu.put("C5", "C5 - SEE ALL CURRENCY");
+		menu.put("C1", "  C1 - ADD NEW CURRENCY");
+		menu.put("C2", "  C2 - FIND CURRENCY");
+		menu.put("C3", "  C3 - DELETE CURRENCY");
+		menu.put("C4", "  C4 - UPDATE CURRENCY");
+		menu.put("C5", "  C5 - SEE ALL CURRENCY");
 	}
 
 	private void generatePinCodeTableSubMenu() {
-		menu.put("D1", "D1 - CREATE NEW PIN CODE");
-		menu.put("D2", "D2 - FIND PIN CODE");
-		menu.put("D3", "D3 - DELETE PIN CODE");
-		menu.put("D4", "D4 - UPDATE PIN CODE");
-		menu.put("D5", "D5 - SEE ALL PIN CODES");
+		menu.put("D1", "  D1 - CREATE NEW PIN CODE");
+		menu.put("D2", "  D2 - FIND PIN CODE");
+		menu.put("D3", "  D3 - DELETE PIN CODE");
+		menu.put("D4", "  D4 - UPDATE PIN CODE");
+		menu.put("D5", "  D5 - SEE ALL PIN CODES");
 	}
 }

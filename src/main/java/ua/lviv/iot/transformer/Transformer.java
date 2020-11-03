@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
+import java.sql.Date;
 
 import ua.lviv.iot.annotation.Column;
 import ua.lviv.iot.annotation.PrimaryKeyComposite;

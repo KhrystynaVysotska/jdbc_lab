@@ -94,7 +94,7 @@ public abstract class AbstractDataAccess<T, ID> implements DataAccess<T, ID> {
 						Field[] innerFields = compositePrimaryKey.getClass().getDeclaredFields();
 						valuesToInsert += getValuesToInsert(innerFields, (T) compositePrimaryKey) + ", ";
 					} else {
-						valuesToInsert += field.get(entity).toString() + ", ";
+						valuesToInsert += "'" + field.get(entity).toString() + "'" + ", ";
 					}
 				}
 
