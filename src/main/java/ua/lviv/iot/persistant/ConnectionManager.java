@@ -16,13 +16,25 @@ public class ConnectionManager {
 	}
 
 	public static Connection getConnection() {
-		try {
-			connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-		} catch (SQLException e) {
-			System.out.println("SQLException: " + e.getMessage());
-			System.out.println("SQLState: " + e.getSQLState());
-			System.out.println("VendorError: " + e.getErrorCode());
+		if (connection == null) {
+			try {
+				connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+			} catch (SQLException e) {
+				System.out.println("SQLException: " + e.getMessage());
+				System.out.println("SQLState: " + e.getSQLState());
+				System.out.println("VendorError: " + e.getErrorCode());
+			}
 		}
 		return connection;
+	}
+
+	public static void closeConnection() {
+		if (connection != null) {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				System.out.println("SQLException: " + e.getMessage());
+			}
+		}
 	}
 }

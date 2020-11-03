@@ -32,33 +32,31 @@ public abstract class AbstractDataAccess<T, ID> implements DataAccess<T, ID> {
 	@Override
 	public List<T> findAll() throws SQLException {
 		List<T> entities = new LinkedList<>();
-		try (Connection connection = ConnectionManager.getConnection()) {
-			try (PreparedStatement preparedStatement = connection
-					.prepareStatement(String.format(FIND_ALL, tableName))) {
-				try (ResultSet resultSet = preparedStatement.executeQuery()) {
-					while (resultSet.next()) {
-						entities.add((T) new Transformer<T>(clazz).convertResultSetToEntity(resultSet));
-					}
+		Connection connection = ConnectionManager.getConnection();
+		try (PreparedStatement preparedStatement = connection.prepareStatement(String.format(FIND_ALL, tableName))) {
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				while (resultSet.next()) {
+					entities.add((T) new Transformer<T>(clazz).convertResultSetToEntity(resultSet));
 				}
 			}
 		}
+
 		return entities;
 	}
 
 	@Override
 	public T findById(ID id) throws SQLException {
 		T entity = null;
-		try (Connection connection = ConnectionManager.getConnection()) {
-			try (PreparedStatement preparedStatement = connection
-					.prepareStatement(String.format(FIND_BY_ID, tableName))) {
-				preparedStatement.setObject(1, id);
-				try (ResultSet resultSet = preparedStatement.executeQuery()) {
-					while (resultSet.next()) {
-						entity = (T) new Transformer<T>(clazz).convertResultSetToEntity(resultSet);
-						break;
-					}
+		Connection connection = ConnectionManager.getConnection();
+		try (PreparedStatement preparedStatement = connection.prepareStatement(String.format(FIND_BY_ID, tableName))) {
+			preparedStatement.setObject(1, id);
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				while (resultSet.next()) {
+					entity = (T) new Transformer<T>(clazz).convertResultSetToEntity(resultSet);
+					break;
 				}
 			}
+
 		}
 		return entity;
 	}
@@ -113,10 +111,9 @@ public abstract class AbstractDataAccess<T, ID> implements DataAccess<T, ID> {
 		String columnNames = getColumnNames(fields, entity);
 		String valuesToInsert = getValuesToInsert(fields, entity);
 		String insert = "INSERT INTO " + tableName + " (" + columnNames + ") VALUES (" + valuesToInsert + ");";
-		try (Connection connection = ConnectionManager.getConnection()) {
-			try (Statement statement = connection.createStatement()) {
-				return statement.executeUpdate(insert);
-			}
+		Connection connection = ConnectionManager.getConnection();
+		try (Statement statement = connection.createStatement()) {
+			return statement.executeUpdate(insert);
 		}
 	}
 
@@ -160,20 +157,18 @@ public abstract class AbstractDataAccess<T, ID> implements DataAccess<T, ID> {
 		String valuesToUpdate = getValuesToUpdate(fields, entity);
 		String condition = getCondition(fields, entity);
 		String update = "UPDATE " + tableName + " SET " + valuesToUpdate + " WHERE " + condition + ";";
-		try (Connection connection = ConnectionManager.getConnection()) {
-			try (Statement statement = connection.createStatement()) {
-				return statement.executeUpdate(update);
-			}
+		Connection connection = ConnectionManager.getConnection();
+		try (Statement statement = connection.createStatement()) {
+			return statement.executeUpdate(update);
 		}
 	}
 
 	@Override
 	public int delete(ID id) throws SQLException {
-		try (Connection connection = ConnectionManager.getConnection()) {
-			try (PreparedStatement preparedStatement = connection.prepareStatement(String.format(DELETE, tableName))) {
-				preparedStatement.setObject(1, id);
-				return preparedStatement.executeUpdate();
-			}
+		Connection connection = ConnectionManager.getConnection();
+		try (PreparedStatement preparedStatement = connection.prepareStatement(String.format(DELETE, tableName))) {
+			preparedStatement.setObject(1, id);
+			return preparedStatement.executeUpdate();
 		}
 	}
 

@@ -8,12 +8,16 @@ public class AccountEntityPrimaryKey {
 	@PrimaryKey
 	@Autoincremented
 	@Column(name = "id")
-	private Integer id;
+	private Integer id = 0;
 	@Column(name = "pin_code_id")
 	private Integer pinCodeId;
 
 	public AccountEntityPrimaryKey() {
-		
+
+	}
+
+	public AccountEntityPrimaryKey(Integer pinCodeId) {
+		this.pinCodeId = pinCodeId;
 	}
 
 	public AccountEntityPrimaryKey(Integer id, Integer pinCodeId) {

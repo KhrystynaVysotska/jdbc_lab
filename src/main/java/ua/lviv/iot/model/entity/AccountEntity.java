@@ -11,7 +11,7 @@ public class AccountEntity {
 	@Column(name = "current_account_number")
 	private Long currentAccountNumber;
 	@Column(name = "amount")
-	private Integer amount;
+	private Integer amount = 0;
 	@Column(name = "account_owner_id")
 	private Integer accountOwnerId;
 	@Column(name = "bank_identification_code")
