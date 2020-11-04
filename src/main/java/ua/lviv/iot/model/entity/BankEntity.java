@@ -10,7 +10,7 @@ import ua.lviv.iot.model.entity.formatter.Formatter;
 @Table(name = "bank")
 public class BankEntity {
 	@PrimaryKey
-	@Column(name = "identification_code")
+	@Column(name = "identification_code", length = 6)
 	private Integer identificationCode;
 	@Column(name = "state_registration_code")
 	private Integer stateRegistrationCode;
