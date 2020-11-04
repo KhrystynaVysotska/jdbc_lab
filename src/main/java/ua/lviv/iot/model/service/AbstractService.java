@@ -3,6 +3,8 @@ package ua.lviv.iot.model.service;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
+
 import ua.lviv.iot.model.dao.AbstractDataAccess;
 
 public abstract class AbstractService<T, ID> implements Service<T, ID> {
@@ -19,7 +21,7 @@ public abstract class AbstractService<T, ID> implements Service<T, ID> {
 	}
 
 	@Override
-	public T create(T entity) throws SQLException {
+	public T create(T entity) throws SQLException, MysqlDataTruncation {
 		int result = getDAO().create(entity);
 		if (result != 0) {
 			List<T> entities = findAll();

@@ -9,10 +9,10 @@ import ua.lviv.iot.model.service.AbstractService;
 
 public class BankService extends AbstractService<BankEntity, Integer> {
 
-	private BankDataAccess bankDataAccess;
+	private BankDataAccess<Integer> bankDataAccess;
 
 	public BankService() {
-		bankDataAccess = new BankDataAccess();
+		bankDataAccess = new BankDataAccess<>();
 	}
 
 	@Override
@@ -21,18 +21,13 @@ public class BankService extends AbstractService<BankEntity, Integer> {
 	}
 
 	@Override
-	public BankEntity findById(Integer identificationCode) throws SQLException {
-		return bankDataAccess.findById(identificationCode);
-	}
-	
-	@Override
-	public boolean delete(Integer identificationCode) throws SQLException {
-		return bankDataAccess.delete(identificationCode) != 0;
-	}
-	@Override
-	public BankEntity update(Integer identificationCode, BankEntity entity) throws SQLException {
-		BankEntity oldEntity = findById(identificationCode);
-		bankDataAccess.update(entity);
-		return oldEntity;
+	public BankEntity create(BankEntity entity) throws SQLException {
+		int result = bankDataAccess.create(entity);
+		if (result != 0) {
+			BankEntity createdBank = findById(entity.getIdentificationCode());
+			return createdBank;
+		} else {
+			return null;
+		}
 	}
 }
