@@ -4,8 +4,20 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+import ua.lviv.iot.controller.AbstractController;
 import ua.lviv.iot.controller.implementation.AccountController;
+import ua.lviv.iot.controller.implementation.AccountOwnerController;
+import ua.lviv.iot.controller.implementation.AccountTypeController;
+import ua.lviv.iot.controller.implementation.AddressController;
+import ua.lviv.iot.controller.implementation.BankCardController;
 import ua.lviv.iot.controller.implementation.BankController;
+import ua.lviv.iot.controller.implementation.BuildingController;
+import ua.lviv.iot.controller.implementation.CardTypeController;
+import ua.lviv.iot.controller.implementation.CityController;
+import ua.lviv.iot.controller.implementation.CurrencyController;
+import ua.lviv.iot.controller.implementation.PinCodeController;
+import ua.lviv.iot.controller.implementation.StreetController;
+import ua.lviv.iot.controller.implementation.TransferController;
 
 public class ConsoleMenu {
 	private static final String EXIT = "Q";
@@ -14,13 +26,17 @@ public class ConsoleMenu {
 	private static final String SELECT_MENU_OPTION = "SELECT MENU OPTION:\n";
 	private static final int START_INDEX_OF_TABLE_NAME = 7;
 	private Map<String, String> menu;
+	@SuppressWarnings("rawtypes")
+	private Map<String, AbstractController> controllers;
 	private Map<String, Printable> methodsMenu;
 	private static Scanner input = new Scanner(System.in);
 
 	public ConsoleMenu() {
 		menu = new LinkedHashMap<>();
 		methodsMenu = new LinkedHashMap<>();
+		controllers = new LinkedHashMap<>();
 		generateMenuOptions();
+		generateControllers();
 		generateMenuMethods();
 		generateSubMenu();
 	}
@@ -34,13 +50,15 @@ public class ConsoleMenu {
 				openSubMenu(choice.trim().toUpperCase());
 				choice = input.nextLine().trim().toUpperCase();
 				if (!choice.equals(EXIT)) {
-					if (choice.length() == 2)
-						methodsMenu.get(choice).print();
-					else
+					if (choice.length() == 2) {
+						methodsMenu.get(choice.substring(1)).print(controllers.get(choice.substring(0, 1)));
+					} else {
 						System.out.println("Incorrect option! Try again\n");
+					}
 				}
 			}
 		} while (!choice.equals(EXIT));
+		methodsMenu.get(EXIT).print(new AccountController());
 	}
 
 	public void openMainMenu() {
@@ -83,17 +101,29 @@ public class ConsoleMenu {
 		menu.put("Q", "  Q   -  EXIT");
 	}
 
+	private void generateControllers() {
+		controllers.put("1", new BankController());
+		controllers.put("2", new AccountController());
+		controllers.put("3", new AccountOwnerController());
+		controllers.put("4", new BankCardController());
+		controllers.put("5", new TransferController());
+		controllers.put("6", new AccountTypeController());
+		controllers.put("7", new CardTypeController());
+		controllers.put("8", new AddressController());
+		controllers.put("9", new CityController());
+		controllers.put("A", new StreetController());
+		controllers.put("B", new BuildingController());
+		controllers.put("C", new CurrencyController());
+		controllers.put("D", new PinCodeController());
+	}
+
 	private void generateMenuMethods() {
-		methodsMenu.put("11", () -> new BankController().create());
-		methodsMenu.put("12", () -> new BankController().getById());
-		methodsMenu.put("13", () -> new BankController().deleteById());
-		methodsMenu.put("14", () -> new BankController().update());
-		methodsMenu.put("15", () -> new BankController().getAll());
-		methodsMenu.put("21", () -> new AccountController().create());
-		methodsMenu.put("22", () -> new AccountController().getById());
-		methodsMenu.put("23", () -> new AccountController().deleteById());
-		methodsMenu.put("24", () -> new AccountController().update());
-		methodsMenu.put("25", () -> new AccountController().getAll());
+		methodsMenu.put("1", controller -> controller.create());
+		methodsMenu.put("2", controller -> controller.getById());
+		methodsMenu.put("3", controller -> controller.deleteById());
+		methodsMenu.put("4", controller -> controller.update());
+		methodsMenu.put("5", controller -> controller.getAll());
+		methodsMenu.put("Q", controller -> controller.exit());
 	}
 
 	private void generateSubMenu() {

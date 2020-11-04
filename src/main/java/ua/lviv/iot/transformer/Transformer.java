@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.sql.Date;
 
 import ua.lviv.iot.annotation.Column;
@@ -38,6 +39,8 @@ public class Transformer<T> {
 							field.set(entity, resultSet.getDate(columnName));
 						} else if (fieldDataType == Long.class) {
 							field.set(entity, resultSet.getLong(columnName));
+						} else if (fieldDataType == Time.class) {
+							field.set(entity, resultSet.getTime(columnName));
 						}
 					}
 					if (field.isAnnotationPresent(PrimaryKeyComposite.class)) {

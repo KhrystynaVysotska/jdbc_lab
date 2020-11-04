@@ -9,6 +9,8 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
+
 import ua.lviv.iot.annotation.Autoincremented;
 import ua.lviv.iot.annotation.Column;
 import ua.lviv.iot.annotation.PrimaryKey;
@@ -106,7 +108,7 @@ public abstract class AbstractDataAccess<T, ID> implements DataAccess<T, ID> {
 	}
 
 	@Override
-	public int create(T entity) throws SQLException {
+	public int create(T entity) throws SQLException, MysqlDataTruncation {
 		Field[] fields = entity.getClass().getDeclaredFields();
 		String columnNames = getColumnNames(fields, entity);
 		String valuesToInsert = getValuesToInsert(fields, entity);

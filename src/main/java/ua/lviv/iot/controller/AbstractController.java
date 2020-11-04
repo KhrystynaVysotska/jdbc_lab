@@ -3,12 +3,15 @@ package ua.lviv.iot.controller;
 import java.lang.reflect.Field;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.util.List;
 import java.util.Scanner;
 
-import ua.lviv.iot.model.entity.BankEntity;
+import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
+
 import ua.lviv.iot.model.entity.formatter.Formatter;
 import ua.lviv.iot.model.service.Service;
+import ua.lviv.iot.persistant.ConnectionManager;
 
 public abstract class AbstractController<T, ID> implements Controller<T, ID> {
 
@@ -25,7 +28,7 @@ public abstract class AbstractController<T, ID> implements Controller<T, ID> {
 			entities = getService().findAll();
 			formatter.formatTable(entities);
 		} catch (SQLException e) {
-			System.out.println(ERROR_MESSAGE);
+			System.out.println(ERROR_MESSAGE + e.getMessage());
 		}
 
 	}
@@ -44,7 +47,7 @@ public abstract class AbstractController<T, ID> implements Controller<T, ID> {
 				System.out.println("Oops...it couldn't be found!\n");
 			}
 		} catch (Exception e) {
-			System.out.println(ERROR_MESSAGE);
+			System.out.println(ERROR_MESSAGE + e.getMessage());
 		}
 	}
 
@@ -58,8 +61,10 @@ public abstract class AbstractController<T, ID> implements Controller<T, ID> {
 			} else {
 				System.out.println("Oops...it couldn't be created!\n");
 			}
-		} catch (Exception e) {
-			System.out.println(ERROR_MESSAGE);
+		} catch (MysqlDataTruncation e) {
+			System.out.println(e.getMessage() + "!Please, follow constraints\n");
+		} catch (Exception e1) {
+			System.out.println(ERROR_MESSAGE + e1.getMessage());
 		}
 	}
 
@@ -88,9 +93,27 @@ public abstract class AbstractController<T, ID> implements Controller<T, ID> {
 							} else if (dataType == Integer.class) {
 								field.set(entity, Integer.valueOf(value));
 							} else if (dataType == Date.class) {
-								field.set(entity, Date.valueOf(value));
+								while (!value.matches("[\\d]{4}([-][\\d]{2}){2}")) {
+									System.out.println("Wrong format! Please, input date in format yyyy-mm-dd");
+									value = input.nextLine();
+								}
+								try {
+									field.set(entity, Date.valueOf(value));
+								} catch (IllegalArgumentException e) {
+									System.out.println("Your date is incorrect! Check and try again!\n");
+								}
 							} else if (dataType == Long.class) {
 								field.set(entity, Long.valueOf(value));
+							} else if (dataType == Time.class) {
+								while (!value.matches("[\\d]{2}([:][\\d]{2}){2}")) {
+									System.out.println("Wrong format! Please, input time in format hh-mm-ss");
+									value = input.nextLine();
+								}
+								try {
+									field.set(entity, Time.valueOf(value));
+								} catch (IllegalArgumentException e) {
+									System.out.println("Your date is incorrect! Check and try again!\n");
+								}
 							}
 							T updatedEntity = getService().update(id, entity);
 							if (updatedEntity != null) {
@@ -111,8 +134,7 @@ public abstract class AbstractController<T, ID> implements Controller<T, ID> {
 				System.out.println("Oops...such object does not exist!\n");
 			}
 		} catch (SQLException | SecurityException | IllegalArgumentException e1) {
-			System.out.println(ERROR_MESSAGE);
-			e1.printStackTrace();
+			System.out.println(ERROR_MESSAGE + e1.getMessage());
 		}
 	}
 
@@ -130,7 +152,14 @@ public abstract class AbstractController<T, ID> implements Controller<T, ID> {
 				System.out.println("Oops...it couldn't be deleted!\n");
 			}
 		} catch (SQLException e) {
-			System.out.println(ERROR_MESSAGE);
+			System.out.println(ERROR_MESSAGE + e.getMessage());
 		}
+	}
+
+	public abstract void create();
+
+	public void exit() {
+		input.close();
+		ConnectionManager.closeConnection();
 	}
 }
