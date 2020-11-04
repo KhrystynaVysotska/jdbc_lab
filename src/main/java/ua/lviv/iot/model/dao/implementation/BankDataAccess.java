@@ -10,16 +10,16 @@ import ua.lviv.iot.model.entity.BankEntity;
 import ua.lviv.iot.persistant.ConnectionManager;
 import ua.lviv.iot.transformer.Transformer;
 
-public class BankDataAccess extends AbstractDataAccess<BankEntity, Integer> {
+public class BankDataAccess<ID> extends AbstractDataAccess<BankEntity, ID> {
 	
 	private static final String FIND_BANK_BY_IDENTIFICATION_CODE = "SELECT * FROM bank WHERE identification_code = ?;";;
 	private static final String DELETE_BANK_BY_IDENTIFICATION_CODE = "DELETE FROM bank WHERE identification_code = ?;";
 	public BankDataAccess() {
 		super(BankEntity.class);
 	}
-	
+
 	@Override
-	public BankEntity findById(Integer identificationCode) throws SQLException {
+	public BankEntity findById(ID identificationCode) throws SQLException {
 		BankEntity bank = null;
 		Connection connection = ConnectionManager.getConnection();
 		try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_BANK_BY_IDENTIFICATION_CODE)) {
@@ -36,7 +36,7 @@ public class BankDataAccess extends AbstractDataAccess<BankEntity, Integer> {
 	}
 	
 	@Override
-	public int delete(Integer identificationCode) throws SQLException {
+	public int delete(ID identificationCode) throws SQLException {
 		Connection connection = ConnectionManager.getConnection();
 		try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BANK_BY_IDENTIFICATION_CODE)) {
 			preparedStatement.setObject(1, identificationCode);
