@@ -3,7 +3,6 @@ package ua.lviv.iot.view;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
-
 import ua.lviv.iot.controller.AbstractController;
 import ua.lviv.iot.controller.implementation.AccountController;
 import ua.lviv.iot.controller.implementation.AccountOwnerController;
@@ -29,7 +28,7 @@ public class ConsoleMenu {
 	@SuppressWarnings("rawtypes")
 	private Map<String, AbstractController> controllers;
 	private Map<String, Printable> methodsMenu;
-	private static Scanner input = new Scanner(System.in);
+	private static Scanner input = new Scanner(System.in, "UTF-8");
 
 	public ConsoleMenu() {
 		menu = new LinkedHashMap<>();

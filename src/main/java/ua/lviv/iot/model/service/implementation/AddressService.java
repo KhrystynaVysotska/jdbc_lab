@@ -12,7 +12,7 @@ public class AddressService extends AbstractService<AddressEntity, Integer> {
 	}
 
 	@Override
-	protected AbstractDataAccess<AddressEntity, Integer> getDAO() {
+	protected AbstractDataAccess<AddressEntity, Integer> getDao() {
 		return new AddressDataAccess();
 	}
 

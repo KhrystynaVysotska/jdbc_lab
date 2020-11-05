@@ -41,23 +41,30 @@ public class AccountEntityPrimaryKey {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		AccountEntityPrimaryKey other = (AccountEntityPrimaryKey) obj;
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		if (pinCodeId == null) {
-			if (other.pinCodeId != null)
+			if (other.pinCodeId != null) {
 				return false;
-		} else if (!pinCodeId.equals(other.pinCodeId))
+			}
+		} else if (!pinCodeId.equals(other.pinCodeId)) {
 			return false;
+		}
 		return true;
 	}
 

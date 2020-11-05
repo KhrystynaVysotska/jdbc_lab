@@ -12,7 +12,7 @@ public class BankCardService extends AbstractService<BankCardEntity, Integer> {
 	}
 
 	@Override
-	protected AbstractDataAccess<BankCardEntity, Integer> getDAO() {
+	protected AbstractDataAccess<BankCardEntity, Integer> getDao() {
 		return new BankCardDataAccess();
 	}
 

@@ -9,7 +9,7 @@ import ua.lviv.iot.model.service.implementation.CurrencyService;
 
 public class CurrencyController extends AbstractController<CurrencyEntity, Integer> {
 
-	private static Scanner input = new Scanner(System.in);
+	private static Scanner input = new Scanner(System.in, "UTF-8");
 	private CurrencyService currencyService = new CurrencyService();
 
 	public CurrencyController() {
@@ -30,7 +30,7 @@ public class CurrencyController extends AbstractController<CurrencyEntity, Integ
 			currency.setName(name);
 			super.create(currency);
 		} catch (InputMismatchException e) {
-			System.out.println("Your input is too long! Please, follow constraints for its length\n");
+			System.out.println("Your input is not valid! Please, follow constraints\n");
 			input.next();
 		}
 	}

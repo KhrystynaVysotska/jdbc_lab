@@ -12,7 +12,7 @@ public class BuildingService extends AbstractService<BuildingEntity, Integer> {
 	}
 
 	@Override
-	protected AbstractDataAccess<BuildingEntity, Integer> getDAO() {
+	protected AbstractDataAccess<BuildingEntity, Integer> getDao() {
 		return new BuildingDataAccess();
 	}
 

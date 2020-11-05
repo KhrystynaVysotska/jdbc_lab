@@ -2,14 +2,13 @@ package ua.lviv.iot.controller.implementation;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
-
 import ua.lviv.iot.controller.AbstractController;
 import ua.lviv.iot.model.entity.BankEntity;
 import ua.lviv.iot.model.service.Service;
 import ua.lviv.iot.model.service.implementation.BankService;
 
 public class BankController extends AbstractController<BankEntity, Integer> {
-	private static Scanner input = new Scanner(System.in);
+	private static Scanner input = new Scanner(System.in, "UTF-8");
 	private BankService bankService = new BankService();
 
 	@Override
@@ -19,12 +18,12 @@ public class BankController extends AbstractController<BankEntity, Integer> {
 
 	public void create() {
 		BankEntity bank = new BankEntity();
-		System.out.println("Enter bank's identification code (up to 9 digits): ");
+		System.out.println("Enter bank's identification code (up to 10 digits): ");
 		try {
 			int identificationCode = input.nextInt();
 			input.nextLine();
 			bank.setIdentificationCode(identificationCode);
-			System.out.println("Enter bank's state registration code (up to 9 digits): ");
+			System.out.println("Enter bank's state registration code (up to 10 digits): ");
 			int stateRegistrationCode = input.nextInt();
 			input.nextLine();
 			bank.setStateRegistrationCode(stateRegistrationCode);
@@ -34,7 +33,7 @@ public class BankController extends AbstractController<BankEntity, Integer> {
 			System.out.println("Enter short bank name: ");
 			String shortBankName = input.nextLine();
 			bank.setShortBankName(shortBankName);
-			System.out.println("Enter bank license number (up to 9 digits): ");
+			System.out.println("Enter bank license number (up to 10 digits): ");
 			int bankLicenseNumber = input.nextInt();
 			input.nextLine();
 			bank.setBankLicenseNumber(bankLicenseNumber);
@@ -51,7 +50,7 @@ public class BankController extends AbstractController<BankEntity, Integer> {
 			}
 			super.create(bank);
 		} catch (InputMismatchException e) {
-			System.out.println("Your input is too long! Please, follow constraints for its length\n");
+			System.out.println("Your input is not valid! Please, follow constraints\n");
 			input.next();
 		}
 	}

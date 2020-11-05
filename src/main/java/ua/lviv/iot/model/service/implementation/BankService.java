@@ -1,7 +1,6 @@
 package ua.lviv.iot.model.service.implementation;
 
 import java.sql.SQLException;
-
 import ua.lviv.iot.model.dao.AbstractDataAccess;
 import ua.lviv.iot.model.dao.implementation.BankDataAccess;
 import ua.lviv.iot.model.entity.BankEntity;
@@ -16,7 +15,7 @@ public class BankService extends AbstractService<BankEntity, Integer> {
 	}
 
 	@Override
-	protected AbstractDataAccess<BankEntity, Integer> getDAO() {
+	protected AbstractDataAccess<BankEntity, Integer> getDao() {
 		return bankDataAccess;
 	}
 

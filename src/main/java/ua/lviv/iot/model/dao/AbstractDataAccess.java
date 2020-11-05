@@ -1,5 +1,6 @@
 package ua.lviv.iot.model.dao;
 
+import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,9 +9,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
-
-import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
-
 import ua.lviv.iot.annotation.Autoincremented;
 import ua.lviv.iot.annotation.Column;
 import ua.lviv.iot.annotation.PrimaryKey;
@@ -19,7 +17,7 @@ import ua.lviv.iot.annotation.Table;
 import ua.lviv.iot.persistant.ConnectionManager;
 import ua.lviv.iot.transformer.Transformer;
 
-public abstract class AbstractDataAccess<T, ID> implements DataAccess<T, ID> {
+public abstract class AbstractDataAccess<T, K> implements DataAccess<T, K> {
 	private Class<T> clazz;
 	private String tableName;
 	private static final String FIND_ALL = "SELECT * FROM %s;";
@@ -47,7 +45,7 @@ public abstract class AbstractDataAccess<T, ID> implements DataAccess<T, ID> {
 	}
 
 	@Override
-	public T findById(ID id) throws SQLException {
+	public T findById(K id) throws SQLException {
 		T entity = null;
 		Connection connection = ConnectionManager.getConnection();
 		try (PreparedStatement preparedStatement = connection.prepareStatement(String.format(FIND_BY_ID, tableName))) {
@@ -55,7 +53,6 @@ public abstract class AbstractDataAccess<T, ID> implements DataAccess<T, ID> {
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				while (resultSet.next()) {
 					entity = (T) new Transformer<T>(clazz).convertResultSetToEntity(resultSet);
-					break;
 				}
 			}
 
@@ -64,7 +61,7 @@ public abstract class AbstractDataAccess<T, ID> implements DataAccess<T, ID> {
 	}
 
 	private String getColumnNames(Field[] fields, T entity) {
-		String columnNames = "";
+		StringBuffer buffer = new StringBuffer();
 		for (Field field : fields) {
 			field.setAccessible(true);
 			try {
@@ -72,9 +69,9 @@ public abstract class AbstractDataAccess<T, ID> implements DataAccess<T, ID> {
 					if (field.isAnnotationPresent(PrimaryKeyComposite.class)) {
 						Object compositePrimaryKey = field.get(entity);
 						Field[] innerFields = compositePrimaryKey.getClass().getDeclaredFields();
-						columnNames += getColumnNames(innerFields, (T) compositePrimaryKey) + ", ";
+						buffer.append(getColumnNames(innerFields, (T) compositePrimaryKey)).append(", ");
 					} else {
-						columnNames += field.getAnnotation(Column.class).name() + ", ";
+						buffer.append(field.getAnnotation(Column.class).name()).append(", ");
 					}
 				}
 
@@ -82,11 +79,11 @@ public abstract class AbstractDataAccess<T, ID> implements DataAccess<T, ID> {
 				e.printStackTrace();
 			}
 		}
-		return columnNames.substring(0, columnNames.length() - 2);
+		return buffer.substring(0, buffer.length() - 2);
 	}
 
 	private String getValuesToInsert(Field[] fields, T entity) {
-		String valuesToInsert = "";
+		StringBuffer buffer = new StringBuffer();
 		for (Field field : fields) {
 			field.setAccessible(true);
 			try {
@@ -94,9 +91,9 @@ public abstract class AbstractDataAccess<T, ID> implements DataAccess<T, ID> {
 					if (field.isAnnotationPresent(PrimaryKeyComposite.class)) {
 						Object compositePrimaryKey = field.get(entity);
 						Field[] innerFields = compositePrimaryKey.getClass().getDeclaredFields();
-						valuesToInsert += getValuesToInsert(innerFields, (T) compositePrimaryKey) + ", ";
+						buffer.append(getValuesToInsert(innerFields, (T) compositePrimaryKey)).append(", ");
 					} else {
-						valuesToInsert += "'" + field.get(entity).toString() + "'" + ", ";
+						buffer.append("'").append(field.get(entity).toString()).append("',");
 					}
 				}
 
@@ -104,7 +101,7 @@ public abstract class AbstractDataAccess<T, ID> implements DataAccess<T, ID> {
 				e.printStackTrace();
 			}
 		}
-		return valuesToInsert.substring(0, valuesToInsert.length() - 2);
+		return buffer.substring(0, buffer.length() - 1);
 	}
 
 	@Override
@@ -120,37 +117,36 @@ public abstract class AbstractDataAccess<T, ID> implements DataAccess<T, ID> {
 	}
 
 	private String getCondition(Field[] fields, T entity) {
-		String condition = "";
+		StringBuffer buffer = new StringBuffer();
 		for (Field field : fields) {
 			field.setAccessible(true);
 			try {
 				if (field.isAnnotationPresent(PrimaryKey.class) && field.isAnnotationPresent(Column.class)) {
 					String fieldName = field.getAnnotation(Column.class).name();
-					condition += fieldName + "=";
-
+					buffer.append(fieldName).append("=");
 					String fieldValue = field.get(entity).toString();
-					condition += fieldValue;
+					buffer.append(fieldValue);
 				} else if (field.isAnnotationPresent(PrimaryKeyComposite.class)) {
 					Object compositePrimaryKey;
 					compositePrimaryKey = field.get(entity);
 					Field[] innerFields = compositePrimaryKey.getClass().getDeclaredFields();
-					condition += getCondition(innerFields, (T) compositePrimaryKey);
+					buffer.append(getCondition(innerFields, (T) compositePrimaryKey));
 				}
 			} catch (IllegalArgumentException | IllegalAccessException e) {
 				e.printStackTrace();
 			}
 		}
-		return condition;
+		return buffer.toString();
 	}
 
 	private String getValuesToUpdate(Field[] fields, T entity) {
 		String[] columnNames = getColumnNames(fields, entity).split(",");
 		String[] values = getValuesToInsert(fields, entity).split(",");
-		String valuesToUpdate = "";
+		StringBuffer buffer = new StringBuffer();
 		for (int i = 0; i < columnNames.length; i++) {
-			valuesToUpdate += columnNames[i].trim() + "=" + values[i].trim() + ", ";
+			buffer.append(columnNames[i].trim()).append("=").append(values[i].trim()).append(", ");
 		}
-		return valuesToUpdate.substring(0, valuesToUpdate.length() - 2);
+		return buffer.substring(0, buffer.length() - 2);
 	}
 
 	@Override
@@ -166,7 +162,7 @@ public abstract class AbstractDataAccess<T, ID> implements DataAccess<T, ID> {
 	}
 
 	@Override
-	public int delete(ID id) throws SQLException {
+	public int delete(K id) throws SQLException {
 		Connection connection = ConnectionManager.getConnection();
 		try (PreparedStatement preparedStatement = connection.prepareStatement(String.format(DELETE, tableName))) {
 			preparedStatement.setObject(1, id);

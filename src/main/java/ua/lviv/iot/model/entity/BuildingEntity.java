@@ -66,28 +66,37 @@ public class BuildingEntity {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		BuildingEntity other = (BuildingEntity) obj;
 		if (flatNumber == null) {
-			if (other.flatNumber != null)
+			if (other.flatNumber != null) {
 				return false;
-		} else if (!flatNumber.equals(other.flatNumber))
+			}
+		} else if (!flatNumber.equals(other.flatNumber)) {
 			return false;
+		}
 		if (houseNumber == null) {
-			if (other.houseNumber != null)
+			if (other.houseNumber != null) {
 				return false;
-		} else if (!houseNumber.equals(other.houseNumber))
+			}
+		} else if (!houseNumber.equals(other.houseNumber)) {
 			return false;
+		}
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		return true;
 	}
 

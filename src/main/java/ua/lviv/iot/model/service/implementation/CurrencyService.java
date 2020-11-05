@@ -12,7 +12,7 @@ public class CurrencyService extends AbstractService<CurrencyEntity, Integer> {
 	}
 
 	@Override
-	protected AbstractDataAccess<CurrencyEntity, Integer> getDAO() {
+	protected AbstractDataAccess<CurrencyEntity, Integer> getDao() {
 		return new CurrencyDataAccess();
 	}
 

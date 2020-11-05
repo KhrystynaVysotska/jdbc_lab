@@ -2,7 +2,6 @@ package ua.lviv.iot.model.entity;
 
 import java.sql.Date;
 import java.sql.Time;
-
 import ua.lviv.iot.annotation.Autoincremented;
 import ua.lviv.iot.annotation.Column;
 import ua.lviv.iot.annotation.PrimaryKey;
@@ -43,7 +42,7 @@ public class TransferEntity {
 		this.recipientAccountId = recipientAccountId;
 		this.amount = amount;
 		this.currencyId = currencyId;
-		this.date = date;
+		this.date = (Date) date.clone();
 		this.time = time;
 		this.purposeOfPayment = purposeOfPayment != null ? purposeOfPayment : "not specified";
 	}
@@ -99,11 +98,11 @@ public class TransferEntity {
 	}
 
 	public Date getDate() {
-		return date;
+		return (Date) date.clone();
 	}
 
 	public void setDate(Date date) {
-		this.date = date;
+		this.date = (Date) date.clone();
 	}
 
 	public Time getTime() {
@@ -139,53 +138,72 @@ public class TransferEntity {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		TransferEntity other = (TransferEntity) obj;
 		if (amount == null) {
-			if (other.amount != null)
+			if (other.amount != null) {
 				return false;
-		} else if (!amount.equals(other.amount))
+			}
+		} else if (!amount.equals(other.amount)) {
 			return false;
+		}
 		if (currencyId == null) {
-			if (other.currencyId != null)
+			if (other.currencyId != null) {
 				return false;
-		} else if (!currencyId.equals(other.currencyId))
+			}
+		} else if (!currencyId.equals(other.currencyId)) {
 			return false;
+		}
 		if (date == null) {
-			if (other.date != null)
+			if (other.date != null) {
 				return false;
-		} else if (!date.equals(other.date))
+			}
+		} else if (!date.equals(other.date)) {
 			return false;
+		}
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		if (purposeOfPayment == null) {
-			if (other.purposeOfPayment != null)
+			if (other.purposeOfPayment != null) {
 				return false;
-		} else if (!purposeOfPayment.equals(other.purposeOfPayment))
+			}
+		} else if (!purposeOfPayment.equals(other.purposeOfPayment)) {
 			return false;
+		}
 		if (recipientAccountId == null) {
-			if (other.recipientAccountId != null)
+			if (other.recipientAccountId != null) {
 				return false;
-		} else if (!recipientAccountId.equals(other.recipientAccountId))
+			}
+		} else if (!recipientAccountId.equals(other.recipientAccountId)) {
 			return false;
+		}
 		if (senderAccountId == null) {
-			if (other.senderAccountId != null)
+			if (other.senderAccountId != null) {
 				return false;
-		} else if (!senderAccountId.equals(other.senderAccountId))
+			}
+		} else if (!senderAccountId.equals(other.senderAccountId)) {
 			return false;
+		}
 		if (time == null) {
-			if (other.time != null)
+			if (other.time != null) {
 				return false;
-		} else if (!time.equals(other.time))
+			}
+		} else if (!time.equals(other.time)) {
 			return false;
+		}
 		return true;
 	}
 }

@@ -2,20 +2,20 @@ package ua.lviv.iot.controller.implementation;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
-
 import ua.lviv.iot.controller.AbstractController;
 import ua.lviv.iot.model.entity.BankCardEntity;
 import ua.lviv.iot.model.service.Service;
 import ua.lviv.iot.model.service.implementation.BankCardService;
 
-public class BankCardController extends AbstractController<BankCardEntity, Integer>{
-	private static Scanner input = new Scanner(System.in);
+public class BankCardController extends AbstractController<BankCardEntity, Integer> {
+	private static Scanner input = new Scanner(System.in, "UTF-8");
 	private BankCardService bankCardService = new BankCardService();
+
 	@Override
 	protected Service<BankCardEntity, Integer> getService() {
 		return bankCardService;
 	}
-	
+
 	@Override
 	public void create() {
 		BankCardEntity bankCard = new BankCardEntity();
@@ -45,9 +45,9 @@ public class BankCardController extends AbstractController<BankCardEntity, Integ
 			}
 			super.create(bankCard);
 		} catch (InputMismatchException e) {
-			System.out.println("Your input is too long! Please, follow constraints for its length\n");
+			System.out.println("Your input is not valid! Please, follow constraints\n");
 			input.next();
 		}
-	} 
+	}
 
 }

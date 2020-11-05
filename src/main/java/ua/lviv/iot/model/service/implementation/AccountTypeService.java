@@ -14,7 +14,7 @@ public class AccountTypeService extends AbstractService<AccountTypeEntity, Integ
 	}
 
 	@Override
-	protected AbstractDataAccess<AccountTypeEntity, Integer> getDAO() {
+	protected AbstractDataAccess<AccountTypeEntity, Integer> getDao() {
 		return accountTypeDataAccess;
 	}
 }

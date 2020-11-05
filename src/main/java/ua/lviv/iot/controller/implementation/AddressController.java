@@ -2,14 +2,13 @@ package ua.lviv.iot.controller.implementation;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
-
 import ua.lviv.iot.controller.AbstractController;
 import ua.lviv.iot.model.entity.AddressEntity;
 import ua.lviv.iot.model.service.Service;
 import ua.lviv.iot.model.service.implementation.AddressService;
 
 public class AddressController extends AbstractController<AddressEntity, Integer> {
-	private static Scanner input = new Scanner(System.in);
+	private static Scanner input = new Scanner(System.in, "UTF-8");
 	private AddressService addressService = new AddressService();
 
 	@Override
@@ -35,7 +34,7 @@ public class AddressController extends AbstractController<AddressEntity, Integer
 			address.setBuildingId(buildingId);
 			super.create(address);
 		} catch (InputMismatchException e) {
-			System.out.println("Your input is too long! Please, follow constraints for its length\n");
+			System.out.println("Your input is not valid! Please, follow constraints\n");
 			input.next();
 		}
 	}

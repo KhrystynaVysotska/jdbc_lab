@@ -121,48 +121,65 @@ public class AccountEntity {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		AccountEntity other = (AccountEntity) obj;
 		if (accountEntityPrimaryKey == null) {
-			if (other.accountEntityPrimaryKey != null)
+			if (other.accountEntityPrimaryKey != null) {
 				return false;
-		} else if (!accountEntityPrimaryKey.equals(other.accountEntityPrimaryKey))
+			}
+		} else if (!accountEntityPrimaryKey.equals(other.accountEntityPrimaryKey)) {
 			return false;
+		}
 		if (accountOwnerId == null) {
-			if (other.accountOwnerId != null)
+			if (other.accountOwnerId != null) {
 				return false;
-		} else if (!accountOwnerId.equals(other.accountOwnerId))
+			}
+		} else if (!accountOwnerId.equals(other.accountOwnerId)) {
 			return false;
+		}
 		if (accountTypeId == null) {
-			if (other.accountTypeId != null)
+			if (other.accountTypeId != null) {
 				return false;
-		} else if (!accountTypeId.equals(other.accountTypeId))
+			}
+		} else if (!accountTypeId.equals(other.accountTypeId)) {
 			return false;
+		}
 		if (amount == null) {
-			if (other.amount != null)
+			if (other.amount != null) {
 				return false;
-		} else if (!amount.equals(other.amount))
+			}
+		} else if (!amount.equals(other.amount)) {
 			return false;
+		}
 		if (bankIdentificationCode == null) {
-			if (other.bankIdentificationCode != null)
+			if (other.bankIdentificationCode != null) {
 				return false;
-		} else if (!bankIdentificationCode.equals(other.bankIdentificationCode))
+			}
+		} else if (!bankIdentificationCode.equals(other.bankIdentificationCode)) {
 			return false;
+		}
 		if (currencyId == null) {
-			if (other.currencyId != null)
+			if (other.currencyId != null) {
 				return false;
-		} else if (!currencyId.equals(other.currencyId))
+			}
+		} else if (!currencyId.equals(other.currencyId)) {
 			return false;
+		}
 		if (currentAccountNumber == null) {
-			if (other.currentAccountNumber != null)
+			if (other.currentAccountNumber != null) {
 				return false;
-		} else if (!currentAccountNumber.equals(other.currentAccountNumber))
+			}
+		} else if (!currentAccountNumber.equals(other.currentAccountNumber)) {
 			return false;
+		}
 		return true;
 	}
 }

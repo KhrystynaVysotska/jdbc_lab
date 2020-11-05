@@ -8,7 +8,7 @@ import ua.lviv.iot.model.service.Service;
 import ua.lviv.iot.model.service.implementation.PinCodeService;
 
 public class PinCodeController extends AbstractController<PinCodeEntity, Integer> {
-	private static Scanner input = new Scanner(System.in);
+	private static Scanner input = new Scanner(System.in, "UTF-8");
 	private PinCodeService pinCodeService = new PinCodeService();
 
 	@Override
@@ -25,7 +25,7 @@ public class PinCodeController extends AbstractController<PinCodeEntity, Integer
 			pinCode.setPin(pin);
 			super.create(pinCode);
 		} catch (InputMismatchException e) {
-			System.out.println("Your input is too long! Please, follow constraints for its length\n");
+			System.out.println("Your input is not valid! Please, follow constraints\n");
 			input.next();
 		}
 	}

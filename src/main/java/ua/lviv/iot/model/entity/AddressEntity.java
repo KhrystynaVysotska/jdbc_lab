@@ -84,33 +84,44 @@ public class AddressEntity {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		AddressEntity other = (AddressEntity) obj;
 		if (buildingId == null) {
-			if (other.buildingId != null)
+			if (other.buildingId != null) {
 				return false;
-		} else if (!buildingId.equals(other.buildingId))
+			}
+		} else if (!buildingId.equals(other.buildingId)) {
 			return false;
+		}
 		if (cityId == null) {
-			if (other.cityId != null)
+			if (other.cityId != null) {
 				return false;
-		} else if (!cityId.equals(other.cityId))
+			}
+		} else if (!cityId.equals(other.cityId)) {
 			return false;
+		}
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		if (streetId == null) {
-			if (other.streetId != null)
+			if (other.streetId != null) {
 				return false;
-		} else if (!streetId.equals(other.streetId))
+			}
+		} else if (!streetId.equals(other.streetId)) {
 			return false;
+		}
 		return true;
 	}
 }

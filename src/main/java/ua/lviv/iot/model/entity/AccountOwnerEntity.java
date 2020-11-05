@@ -1,14 +1,13 @@
 package ua.lviv.iot.model.entity;
 
 import java.sql.Date;
-
 import ua.lviv.iot.annotation.Autoincremented;
 import ua.lviv.iot.annotation.Column;
 import ua.lviv.iot.annotation.PrimaryKey;
 import ua.lviv.iot.annotation.Table;
 import ua.lviv.iot.model.entity.formatter.Formatter;
 
-@Table(name= "account_owner")
+@Table(name = "account_owner")
 public class AccountOwnerEntity {
 	@PrimaryKey
 	@Autoincremented
@@ -53,7 +52,7 @@ public class AccountOwnerEntity {
 		this.patronym = patronym;
 		this.mobileNumber = mobileNumber;
 		this.email = email;
-		this.birthDate = birthDate;
+		this.birthDate = (Date) birthDate.clone();
 		this.addressId = addressId;
 	}
 
@@ -123,11 +122,11 @@ public class AccountOwnerEntity {
 	}
 
 	public Date getBirthDate() {
-		return birthDate;
+		return (Date) birthDate.clone();
 	}
 
 	public void setBirthDate(Date birthDate) {
-		this.birthDate = birthDate;
+		this.birthDate = (Date) birthDate.clone();
 	}
 
 	public Integer getAddressId() {
@@ -157,59 +156,79 @@ public class AccountOwnerEntity {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		AccountOwnerEntity other = (AccountOwnerEntity) obj;
 		if (addressId == null) {
-			if (other.addressId != null)
+			if (other.addressId != null) {
 				return false;
-		} else if (!addressId.equals(other.addressId))
+			}
+		} else if (!addressId.equals(other.addressId)) {
 			return false;
+		}
 		if (birthDate == null) {
-			if (other.birthDate != null)
+			if (other.birthDate != null) {
 				return false;
-		} else if (!birthDate.equals(other.birthDate))
+			}
+		} else if (!birthDate.equals(other.birthDate)) {
 			return false;
+		}
 		if (email == null) {
-			if (other.email != null)
+			if (other.email != null) {
 				return false;
-		} else if (!email.equals(other.email))
+			}
+		} else if (!email.equals(other.email)) {
 			return false;
+		}
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		if (mobileNumber == null) {
-			if (other.mobileNumber != null)
+			if (other.mobileNumber != null) {
 				return false;
-		} else if (!mobileNumber.equals(other.mobileNumber))
+			}
+		} else if (!mobileNumber.equals(other.mobileNumber)) {
 			return false;
+		}
 		if (name == null) {
-			if (other.name != null)
+			if (other.name != null) {
 				return false;
-		} else if (!name.equals(other.name))
+			}
+		} else if (!name.equals(other.name)) {
 			return false;
+		}
 		if (patronym == null) {
-			if (other.patronym != null)
+			if (other.patronym != null) {
 				return false;
-		} else if (!patronym.equals(other.patronym))
+			}
+		} else if (!patronym.equals(other.patronym)) {
 			return false;
+		}
 		if (personalIdentificationNumber == null) {
-			if (other.personalIdentificationNumber != null)
+			if (other.personalIdentificationNumber != null) {
 				return false;
-		} else if (!personalIdentificationNumber.equals(other.personalIdentificationNumber))
+			}
+		} else if (!personalIdentificationNumber.equals(other.personalIdentificationNumber)) {
 			return false;
+		}
 		if (surname == null) {
-			if (other.surname != null)
+			if (other.surname != null) {
 				return false;
-		} else if (!surname.equals(other.surname))
+			}
+		} else if (!surname.equals(other.surname)) {
 			return false;
+		}
 		return true;
 	}
-
 }

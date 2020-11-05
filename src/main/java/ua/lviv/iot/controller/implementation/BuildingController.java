@@ -8,7 +8,7 @@ import ua.lviv.iot.model.service.Service;
 import ua.lviv.iot.model.service.implementation.BuildingService;
 
 public class BuildingController extends AbstractController<BuildingEntity, Integer> {
-	private static Scanner input = new Scanner(System.in);
+	private static Scanner input = new Scanner(System.in, "UTF-8");
 	private BuildingService buildingService = new BuildingService();
 
 	@Override
@@ -28,7 +28,7 @@ public class BuildingController extends AbstractController<BuildingEntity, Integ
 			building.setFlatNumber(flatNumber);
 			super.create(building);
 		} catch (InputMismatchException e) {
-			System.out.println("Your input is too long! Please, follow constraints for its length\n");
+			System.out.println("Your input is not valid! Please, follow constraints\n");
 			input.next();
 		}
 	}

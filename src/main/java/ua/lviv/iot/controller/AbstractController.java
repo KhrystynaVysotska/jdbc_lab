@@ -1,24 +1,22 @@
 package ua.lviv.iot.controller;
 
+import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 import java.lang.reflect.Field;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.List;
 import java.util.Scanner;
-
-import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
-
 import ua.lviv.iot.model.entity.formatter.Formatter;
 import ua.lviv.iot.model.service.Service;
 import ua.lviv.iot.persistant.ConnectionManager;
 
-public abstract class AbstractController<T, ID> implements Controller<T, ID> {
+public abstract class AbstractController<T, K> implements Controller<T, K> {
 
 	private static final String ERROR_MESSAGE = "Oops...something went wrong\n";
-	private static Scanner input = new Scanner(System.in);
+	private static Scanner input = new Scanner(System.in, "UTF-8");
 
-	protected abstract Service<T, ID> getService();
+	protected abstract Service<T, K> getService();
 
 	@Override
 	public void getAll() {
@@ -30,14 +28,13 @@ public abstract class AbstractController<T, ID> implements Controller<T, ID> {
 		} catch (SQLException e) {
 			System.out.println(ERROR_MESSAGE + e.getMessage());
 		}
-
 	}
 
 	@Override
 	public void getById() {
 		T foundedEntity = null;
 		System.out.println("Enter id: ");
-		ID id = (ID) input.next();
+		K id = (K) input.next();
 		input.nextLine();
 		try {
 			foundedEntity = getService().findById(id);
@@ -68,10 +65,12 @@ public abstract class AbstractController<T, ID> implements Controller<T, ID> {
 		}
 	}
 
+	public abstract void create();
+
 	@Override
 	public void update() {
 		System.out.println("Enter id of entity you want to update: ");
-		ID id = (ID) input.nextLine();
+		K id = (K) input.nextLine();
 		try {
 			T entity = getService().findById(id);
 			if (entity != null) {
@@ -106,7 +105,7 @@ public abstract class AbstractController<T, ID> implements Controller<T, ID> {
 								field.set(entity, Long.valueOf(value));
 							} else if (dataType == Time.class) {
 								while (!value.matches("[\\d]{2}([:][\\d]{2}){2}")) {
-									System.out.println("Wrong format! Please, input time in format hh-mm-ss");
+									System.out.println("Wrong format! Please, input time in format hh:mm:ss");
 									value = input.nextLine();
 								}
 								try {
@@ -142,7 +141,7 @@ public abstract class AbstractController<T, ID> implements Controller<T, ID> {
 	public void deleteById() {
 		boolean deleteStatus;
 		System.out.println("Enter id: ");
-		ID id = (ID) input.next();
+		K id = (K) input.next();
 		input.nextLine();
 		try {
 			deleteStatus = getService().delete(id);
@@ -155,8 +154,6 @@ public abstract class AbstractController<T, ID> implements Controller<T, ID> {
 			System.out.println(ERROR_MESSAGE + e.getMessage());
 		}
 	}
-
-	public abstract void create();
 
 	public void exit() {
 		input.close();

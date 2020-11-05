@@ -1,7 +1,6 @@
 package ua.lviv.iot.model.entity;
 
 import java.sql.Date;
-
 import ua.lviv.iot.annotation.Autoincremented;
 import ua.lviv.iot.annotation.Column;
 import ua.lviv.iot.annotation.PrimaryKey;
@@ -38,7 +37,7 @@ public class BankCardEntity {
 		this.accountId = accountId;
 		this.cardTypeId = cardTypeId;
 		this.cvc2 = cvc2;
-		this.dateOfExpire = dateOfExpire;
+		this.dateOfExpire = (Date) dateOfExpire.clone();
 	}
 
 	@Override
@@ -82,11 +81,11 @@ public class BankCardEntity {
 	}
 
 	public Date getDateOfExpire() {
-		return dateOfExpire;
+		return (Date) dateOfExpire.clone();
 	}
 
 	public void setDateOfExpire(Date dateOfExpire) {
-		this.dateOfExpire = dateOfExpire;
+		this.dateOfExpire = (Date) dateOfExpire.clone();
 	}
 
 	@Override
@@ -103,38 +102,51 @@ public class BankCardEntity {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		BankCardEntity other = (BankCardEntity) obj;
 		if (accountId == null) {
-			if (other.accountId != null)
+			if (other.accountId != null) {
 				return false;
-		} else if (!accountId.equals(other.accountId))
+			}
+		} else if (!accountId.equals(other.accountId)) {
 			return false;
+		}
 		if (cardTypeId == null) {
-			if (other.cardTypeId != null)
+			if (other.cardTypeId != null) {
 				return false;
-		} else if (!cardTypeId.equals(other.cardTypeId))
+			}
+		} else if (!cardTypeId.equals(other.cardTypeId)) {
 			return false;
+		}
 		if (cvc2 == null) {
-			if (other.cvc2 != null)
+			if (other.cvc2 != null) {
 				return false;
-		} else if (!cvc2.equals(other.cvc2))
+			}
+		} else if (!cvc2.equals(other.cvc2)) {
 			return false;
+		}
 		if (dateOfExpire == null) {
-			if (other.dateOfExpire != null)
+			if (other.dateOfExpire != null) {
 				return false;
-		} else if (!dateOfExpire.equals(other.dateOfExpire))
+			}
+		} else if (!dateOfExpire.equals(other.dateOfExpire)) {
 			return false;
+		}
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		return true;
 	}
 }

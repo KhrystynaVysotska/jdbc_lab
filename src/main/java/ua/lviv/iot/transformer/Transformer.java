@@ -2,11 +2,10 @@ package ua.lviv.iot.transformer;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
-import java.sql.Date;
-
 import ua.lviv.iot.annotation.Column;
 import ua.lviv.iot.annotation.PrimaryKeyComposite;
 import ua.lviv.iot.annotation.Table;

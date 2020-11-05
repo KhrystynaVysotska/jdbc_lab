@@ -12,7 +12,7 @@ public class StreetService extends AbstractService<StreetEntity, Integer> {
 	}
 
 	@Override
-	protected AbstractDataAccess<StreetEntity, Integer> getDAO() {
+	protected AbstractDataAccess<StreetEntity, Integer> getDao() {
 		return new StreetDataAccess();
 	}
 

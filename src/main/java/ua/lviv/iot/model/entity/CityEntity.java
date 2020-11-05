@@ -86,33 +86,44 @@ public class CityEntity {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		CityEntity other = (CityEntity) obj;
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		if (name == null) {
-			if (other.name != null)
+			if (other.name != null) {
 				return false;
-		} else if (!name.equals(other.name))
+			}
+		} else if (!name.equals(other.name)) {
 			return false;
+		}
 		if (phoneCode == null) {
-			if (other.phoneCode != null)
+			if (other.phoneCode != null) {
 				return false;
-		} else if (!phoneCode.equals(other.phoneCode))
+			}
+		} else if (!phoneCode.equals(other.phoneCode)) {
 			return false;
+		}
 		if (zipCode == null) {
-			if (other.zipCode != null)
+			if (other.zipCode != null) {
 				return false;
-		} else if (!zipCode.equals(other.zipCode))
+			}
+		} else if (!zipCode.equals(other.zipCode)) {
 			return false;
+		}
 		return true;
 	}
 }

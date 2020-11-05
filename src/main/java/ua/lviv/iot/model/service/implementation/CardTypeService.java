@@ -12,7 +12,7 @@ public class CardTypeService extends AbstractService<CardTypeEntity, Integer> {
 	}
 
 	@Override
-	protected AbstractDataAccess<CardTypeEntity, Integer> getDAO() {
+	protected AbstractDataAccess<CardTypeEntity, Integer> getDao() {
 		return new CardTypeDataAccess();
 	}
 

@@ -12,7 +12,7 @@ public class AccountOwnerService extends AbstractService<AccountOwnerEntity, Int
 	}
 
 	@Override
-	protected AbstractDataAccess<AccountOwnerEntity, Integer> getDAO() {
+	protected AbstractDataAccess<AccountOwnerEntity, Integer> getDao() {
 		return new AccountOwnerDataAccess();
 	}
 

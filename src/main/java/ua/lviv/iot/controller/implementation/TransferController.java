@@ -6,14 +6,13 @@ import java.sql.Time;
 import java.time.LocalTime;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-
 import ua.lviv.iot.controller.AbstractController;
 import ua.lviv.iot.model.entity.TransferEntity;
 import ua.lviv.iot.model.service.Service;
 import ua.lviv.iot.model.service.implementation.TransferService;
 
 public class TransferController extends AbstractController<TransferEntity, Integer> {
-	private static Scanner input = new Scanner(System.in);
+	private static Scanner input = new Scanner(System.in, "UTF-8");
 	private TransferService transferService = new TransferService();
 
 	@Override
@@ -50,11 +49,10 @@ public class TransferController extends AbstractController<TransferEntity, Integ
 			transfer.setPurposeOfPayment(purposeOfPayment);
 			transferService.makeTransaction(transfer);
 		} catch (InputMismatchException e) {
-			System.out.println("Your input is too long! Please, follow constraints for its length\n");
+			System.out.println("Your input is not valid! Please, follow constraints\n");
 			input.next();
 		} catch (SQLException e1) {
 			System.out.println("Transaction failed!" + e1.getMessage());
 		}
 	}
-
 }

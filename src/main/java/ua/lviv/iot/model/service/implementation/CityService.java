@@ -12,7 +12,7 @@ public class CityService extends AbstractService<CityEntity, Integer> {
 	}
 
 	@Override
-	protected AbstractDataAccess<CityEntity, Integer> getDAO() {
+	protected AbstractDataAccess<CityEntity, Integer> getDao() {
 		return new CityDataAccess();
 	}
 

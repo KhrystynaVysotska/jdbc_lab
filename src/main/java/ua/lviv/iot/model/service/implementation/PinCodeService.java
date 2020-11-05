@@ -12,7 +12,7 @@ public class PinCodeService extends AbstractService<PinCodeEntity, Integer> {
 	}
 
 	@Override
-	protected AbstractDataAccess<PinCodeEntity, Integer> getDAO() {
+	protected AbstractDataAccess<PinCodeEntity, Integer> getDao() {
 		return new PinCodeDataAccess();
 	}
 

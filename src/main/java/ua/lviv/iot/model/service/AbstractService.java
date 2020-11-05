@@ -1,28 +1,26 @@
 package ua.lviv.iot.model.service;
 
+import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 import java.sql.SQLException;
 import java.util.List;
-
-import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
-
 import ua.lviv.iot.model.dao.AbstractDataAccess;
 
-public abstract class AbstractService<T, ID> implements Service<T, ID> {
-	protected abstract AbstractDataAccess<T, ID> getDAO();
+public abstract class AbstractService<T, K> implements Service<T, K> {
+	protected abstract AbstractDataAccess<T, K> getDao();
 
 	@Override
 	public List<T> findAll() throws SQLException {
-		return getDAO().findAll();
+		return getDao().findAll();
 	}
 
 	@Override
-	public T findById(ID id) throws SQLException {
-		return getDAO().findById(id);
+	public T findById(K id) throws SQLException {
+		return getDao().findById(id);
 	}
 
 	@Override
 	public T create(T entity) throws SQLException, MysqlDataTruncation {
-		int result = getDAO().create(entity);
+		int result = getDao().create(entity);
 		if (result != 0) {
 			List<T> entities = findAll();
 			T createdEntity = entities.get(entities.size() - 1);
@@ -33,15 +31,15 @@ public abstract class AbstractService<T, ID> implements Service<T, ID> {
 	}
 
 	@Override
-	public T update(ID id, T entity) throws SQLException {
+	public T update(K id, T entity) throws SQLException {
 		T oldEntity = findById(id);
-		getDAO().update(entity);
+		getDao().update(entity);
 		return oldEntity;
 	}
 
 	@Override
-	public boolean delete(ID id) throws SQLException {
-		return getDAO().delete(id) != 0;
+	public boolean delete(K id) throws SQLException {
+		return getDao().delete(id) != 0;
 	}
 
 }
